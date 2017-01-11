@@ -330,7 +330,8 @@ class FileInfo(TaskInfo):
         src_bucket, src_key = find_bucket_key(self.src)
         bucket, key = find_bucket_key(self.dest)
         src_acl = self.client.get_object_acl(Bucket=src_bucket, Key=src_key)
-        acl = {'Grants': src_acl['Grants'], 'Owner': src_acl['Owner']}
+        dest_acl = self.client.get_object_acl(Bucket=bucket, Key=key)
+        acl = {'Grants': src_acl['Grants'], 'Owner': dest_acl['Owner']}
 
         self.client.put_object_acl(
             Bucket=bucket, Key=key, AccessControlPolicy=acl
